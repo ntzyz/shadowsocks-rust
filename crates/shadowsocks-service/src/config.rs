@@ -703,6 +703,8 @@ pub struct ManagerConfig {
     pub mode: Mode,
     /// Server's running mode
     pub server_mode: ManagerServerMode,
+    /// Connect IPv6 first
+    pub ipv6_first: bool,
     /// Server's command if running in Standalone mode
     #[cfg(unix)]
     pub server_program: String,
@@ -722,6 +724,7 @@ impl ManagerConfig {
             server_host: ManagerServerHost::default(),
             mode: Mode::TcpOnly,
             server_mode: ManagerServerMode::Builtin,
+            ipv6_first: false,
             #[cfg(unix)]
             server_program: "ssserver".to_owned(),
             #[cfg(unix)]

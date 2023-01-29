@@ -97,6 +97,7 @@ impl Manager {
 
     /// Create a new manager server with context and configuration
     pub(crate) fn with_context(svr_cfg: ManagerConfig, context: SharedContext) -> Manager {
+        let ipv6_first = svr_cfg.ipv6_first;
         Manager {
             context,
             servers: Mutex::new(HashMap::new()),
@@ -106,7 +107,7 @@ impl Manager {
             udp_expiry_duration: None,
             udp_capacity: None,
             acl: None,
-            ipv6_first: false,
+            ipv6_first,
             security: SecurityConfig::default(),
             worker_count: 1,
         }

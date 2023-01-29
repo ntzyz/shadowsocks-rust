@@ -371,6 +371,11 @@ pub fn main(matches: &ArgMatches) -> ExitCode {
                 });
             }
 
+            if matches.get_flag("IPV6_FIRST") || config.ipv6_first {
+                manager_config.ipv6_first = true;
+            }
+            println!("manager_config.ipv6_first = ${:?}", manager_config.ipv6_first);
+
             #[cfg(unix)]
             if let Some(server_mode) = matches.get_one::<ManagerServerMode>("MANAGER_SERVER_MODE").cloned() {
                 manager_config.server_mode = server_mode;
@@ -410,10 +415,6 @@ pub fn main(matches: &ArgMatches) -> ExitCode {
 
         if let Some(dns) = matches.get_one::<String>("DNS") {
             config.set_dns_formatted(dns).expect("dns");
-        }
-
-        if matches.get_flag("IPV6_FIRST") {
-            config.ipv6_first = true;
         }
 
         if let Some(udp_timeout) = matches.get_one::<u64>("UDP_TIMEOUT") {
