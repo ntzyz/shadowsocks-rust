@@ -4,7 +4,7 @@ use std::{
     collections::HashMap,
     io::{self, ErrorKind},
     str,
-    string::ToString,
+    string::ToString, net::IpAddr,
 };
 
 use serde::{Deserialize, Serialize};
@@ -30,6 +30,8 @@ pub struct ServerConfig {
     pub password: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub method: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outbound_bind_addr: Option<IpAddr>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub no_delay: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]

@@ -6,7 +6,7 @@ use std::{
     collections::HashMap,
     error,
     fmt::{self, Debug, Display},
-    net::SocketAddr,
+    net::{SocketAddr, IpAddr},
     str::FromStr,
     sync::Arc,
     time::Duration,
@@ -339,6 +339,9 @@ pub struct ServerConfig {
 
     /// Weight
     weight: ServerWeight,
+
+    /// outbound
+    outbound_bind_addr: Option<IpAddr>
 }
 
 #[cfg(feature = "aead-cipher-2022")]
@@ -450,6 +453,7 @@ impl ServerConfig {
             remarks: None,
             id: None,
             mode: Mode::TcpAndUdp, // Server serves TCP & UDP by default
+            outbound_bind_addr: None,
             weight: ServerWeight::new(),
         }
     }
@@ -525,6 +529,19 @@ impl ServerConfig {
     pub fn method(&self) -> CipherKind {
         self.method
     }
+
+    pub fn outbound_bind_addr(&self) -> Option<IpAddr> {
+        self.outbound_bind_addr
+    }
+
+    /// Set server addr
+    pub fn set_outbound_bind_addr<A>(&mut self, a: A)
+    where
+        A: Into<IpAddr>,
+    {
+        self.outbound_bind_addr = Some(a.into());
+    }
+
 
     /// Get plugin
     pub fn plugin(&self) -> Option<&PluginConfig> {

@@ -223,8 +223,11 @@ impl Manager {
         // * AccessControlList
         // * DNS Resolver
         let mut server = Server::new(svr_cfg.clone());
+        let mut opts = self.connect_opts.clone();
+        
+        opts.bind_local_addr = svr_cfg.outbound_bind_addr();
 
-        server.set_connect_opts(self.connect_opts.clone());
+        server.set_connect_opts(opts.clone());
         server.set_accept_opts(self.accept_opts.clone());
         server.set_dns_resolver(self.context.dns_resolver().clone());
 
@@ -533,6 +536,7 @@ impl Manager {
                 server_port: svr_cfg.addr().port(),
                 password: svr_cfg.password().to_owned(),
                 method: None,
+                outbound_bind_addr: None,
                 no_delay: None,
                 plugin: None,
                 plugin_opts: None,

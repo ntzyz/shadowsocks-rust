@@ -340,6 +340,9 @@ struct SSServerExtConfig {
     udp_weight: Option<f32>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
+    outbound_bind_addr: Option<IpAddr>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
     acl: Option<String>,
 }
 
@@ -1800,6 +1803,10 @@ impl Config {
                     nsvr.set_weight(weight);
                 }
 
+                if let Some(outbound_bind_addr) = svr.outbound_bind_addr {
+                    nsvr.set_outbound_bind_addr(outbound_bind_addr.clone())
+                }
+
                 let mut server_instance = ServerInstanceConfig {
                     config: nsvr,
                     acl: None,
@@ -2530,6 +2537,7 @@ impl fmt::Display for Config {
                             .acl
                             .as_ref()
                             .and_then(|a| a.file_path().to_str().map(ToOwned::to_owned)),
+                        outbound_bind_addr: svr.outbound_bind_addr().clone()
                     });
                 }
 
